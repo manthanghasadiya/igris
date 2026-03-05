@@ -115,7 +115,7 @@ igris does exactly that: sends adversarial inputs, observes agent behavior, and 
 
 ## From the Creator of mcpsec
 
-igris is built by the creator of [mcpsec](https://github.com/manthanghasadiya/mcpsec), which found CVSS 10.0 vulnerabilities in Microsoft and AWS MCP implementations.
+igris is built by the creator of [mcpsec](https://github.com/manthanghasadiya/mcpsec), which has reported 12+ vulnerabilities ranging from Medium to Critical severity in popular MCP implementations.
 
 Same approach, one layer up: mcpsec tests MCP servers (the transport layer), igris tests agent workflows (the orchestration layer).
 
