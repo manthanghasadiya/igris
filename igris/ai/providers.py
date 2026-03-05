@@ -33,11 +33,8 @@ PROVIDERS = {
         "env_key": "OPENAI_API_KEY",
         "default_model": "gpt-4o-mini",
     },
-    "anthropic": {
-        "base_url": "https://api.anthropic.com/v1",  # Note: Anthropic uses a different SDK usually, but OpenRouter handles it
-        "env_key": "ANTHROPIC_API_KEY",
-        "default_model": "claude-3-5-sonnet-20240620",
-    },
+    # Note: Anthropic is NOT OpenAI-compatible. Use OpenRouter for Claude models:
+    #   igris scan --ai --provider openrouter  (with OPENROUTER_API_KEY set)
     "ollama": {
         "base_url": "http://localhost:11434/v1",
         "env_key": None,  # No key needed
