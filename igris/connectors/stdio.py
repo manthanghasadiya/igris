@@ -1,5 +1,5 @@
 """
-STDIO Connector for Voight
+STDIO Connector for Igris
 ==========================
 
 Connects to an AI agent that communicates via standard I/O streams using JSON lines.
@@ -10,7 +10,7 @@ import subprocess
 import shlex
 from typing import Any
 
-from voight.connectors.http import AgentResponse, AgentCapabilities
+from igris.connectors.http import AgentResponse, AgentCapabilities
 
 class StdioConnector:
     """

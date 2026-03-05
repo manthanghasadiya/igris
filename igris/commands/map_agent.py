@@ -13,7 +13,7 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
-from voight.connectors import HTTPConnector, StdioConnector
+from igris.connectors import HTTPConnector, StdioConnector
 
 app = typer.Typer()
 console = Console()
@@ -33,7 +33,7 @@ def map_agent(
     
     Example:
     
-        voight map --http http://localhost:8000/chat
+        igris map --http http://localhost:8000/chat
     """
     
     if not http and not stdio:
@@ -43,7 +43,7 @@ def map_agent(
     target_display = http if http else stdio
     
     console.print(Panel.fit(
-        f"[bold]Voight Architecture Mapper[/]\n"
+        f"[bold]Igris Architecture Mapper[/]\n"
         f"[dim]Target:[/] {target_display}",
         title="🗺️ Mapping Agent",
     ))

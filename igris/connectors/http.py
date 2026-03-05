@@ -1,5 +1,5 @@
 """
-HTTP Connector for voight
+HTTP Connector for igris
 ===========================
 
 Connects to any AI agent that exposes an HTTP chat endpoint.

@@ -1,15 +1,15 @@
-# voight
+# igris
 
 **Security scanner for AI agent workflows.**
 
 Find vulnerabilities in LangChain, CrewAI, OpenAI Agents SDK, and other AI agent frameworks before attackers do.
 
-[![PyPI](https://img.shields.io/pypi/v/voight.svg)](https://pypi.org/project/voight/)
+[![PyPI](https://img.shields.io/pypi/v/igris.svg)](https://pypi.org/project/igris/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## What It Does
 
-voight connects to running AI agents and tests them for security vulnerabilities:
+igris connects to running AI agents and tests them for security vulnerabilities:
 
 - **Prompt Injection** — Can attackers override the agent's instructions?
 - **System Prompt Extraction** — Can attackers leak the agent's configuration?
@@ -21,13 +21,13 @@ voight connects to running AI agents and tests them for security vulnerabilities
 
 ```bash
 # Install
-pip install voight
+pip install igris
 
 # Scan an agent
-voight scan --http http://localhost:8000/chat
+igris scan --http http://localhost:8000/chat
 
 # Map agent capabilities
-voight map --http http://localhost:8000/chat
+igris map --http http://localhost:8000/chat
 ```
 
 ## Example Output
@@ -61,13 +61,13 @@ Critical: 1  High: 2  Medium: 1  Low: 0
 ## Installation
 
 ```bash
-pip install voight
+pip install igris
 ```
 
 Or with AI-powered analysis:
 
 ```bash
-pip install voight[ai]
+pip install igris[ai]
 ```
 
 ## Usage
@@ -76,28 +76,28 @@ pip install voight[ai]
 
 ```bash
 # Basic scan
-voight scan --http http://localhost:8000/chat
+igris scan --http http://localhost:8000/chat
 
 # With authentication
-voight scan --http https://api.example.com/agent --auth "Bearer sk-xxx"
+igris scan --http https://api.example.com/agent --auth "Bearer sk-xxx"
 
 # Save report
-voight scan --http http://localhost:8000/chat --output report.json
+igris scan --http http://localhost:8000/chat --output report.json
 
 # Verbose output
-voight scan --http http://localhost:8000/chat --verbose
+igris scan --http http://localhost:8000/chat --verbose
 ```
 
 ### Map Agent Architecture
 
 ```bash
 # Discover what the agent can do
-voight map --http http://localhost:8000/chat
+igris map --http http://localhost:8000/chat
 ```
 
 ## Supported Frameworks
 
-voight works with any AI agent that exposes an HTTP endpoint:
+igris works with any AI agent that exposes an HTTP endpoint:
 
 - ✅ LangChain / LangGraph
 - ✅ CrewAI
@@ -105,19 +105,19 @@ voight works with any AI agent that exposes an HTTP endpoint:
 - ✅ AutoGen
 - ✅ Custom agents
 
-## Why voight?
+## Why igris?
 
-Traditional security tools test **code**. voight tests **behavior**.
+Traditional security tools test **code**. igris tests **behavior**.
 
 AI agents make decisions at runtime. They interpret instructions, choose tools, and act on user input. Static analysis can't find these bugs — you need to actually **talk to the agent** and see what it does.
 
-voight does exactly that: sends adversarial inputs, observes agent behavior, and reports when the agent does something dangerous.
+igris does exactly that: sends adversarial inputs, observes agent behavior, and reports when the agent does something dangerous.
 
 ## From the Creator of mcpsec
 
-voight is built by the creator of [mcpsec](https://github.com/manthanghasadiya/mcpsec), which found CVSS 10.0 vulnerabilities in Microsoft and AWS MCP implementations.
+igris is built by the creator of [mcpsec](https://github.com/manthanghasadiya/mcpsec), which found CVSS 10.0 vulnerabilities in Microsoft and AWS MCP implementations.
 
-Same approach, one layer up: mcpsec tests MCP servers (the transport layer), voight tests agent workflows (the orchestration layer).
+Same approach, one layer up: mcpsec tests MCP servers (the transport layer), igris tests agent workflows (the orchestration layer).
 
 ## License
 

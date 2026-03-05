@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "voight"
+name = "igris"
 version = "0.1.0"
 description = "Security scanner for AI agent workflows - find vulnerabilities in LangChain, CrewAI, and other agent frameworks"
 readme = "README.md"
@@ -44,12 +44,12 @@ ai = [
 ]
 
 [project.scripts]
-voight = "voight.cli:app"
+igris = "igris.cli:app"
 
 [project.urls]
-Homepage = "https://github.com/manthanghasadiya/voight"
-Repository = "https://github.com/manthanghasadiya/voight"
-Issues = "https://github.com/manthanghasadiya/voight/issues"
+Homepage = "https://github.com/manthanghasadiya/igris"
+Repository = "https://github.com/manthanghasadiya/igris"
+Issues = "https://github.com/manthanghasadiya/igris/issues"
 
 [tool.ruff]
 line-length = 100

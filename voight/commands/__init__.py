@@ -1,3 +1,0 @@
-"""
-voight Commands
-"""

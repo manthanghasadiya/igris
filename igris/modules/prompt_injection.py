@@ -16,7 +16,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Callable
 
-from voight.connectors import HTTPConnector, AgentResponse
+from igris.connectors import HTTPConnector, AgentResponse
 
 
 class Severity(Enum):

@@ -14,8 +14,8 @@ from rich.panel import Panel
 from rich.table import Table
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
-from voight.connectors import HTTPConnector, StdioConnector
-from voight.modules import PromptInjectionScanner, Severity
+from igris.connectors import HTTPConnector, StdioConnector
+from igris.modules import PromptInjectionScanner, Severity
 
 app = typer.Typer()
 console = Console()
@@ -50,10 +50,10 @@ def scan(
     
     Examples:
     
-        voight scan --http http://localhost:8000/chat
-        voight scan --stdio "python my_agent.py"
+        igris scan --http http://localhost:8000/chat
+        igris scan --stdio "python my_agent.py"
         
-        voight scan --http https://api.example.com/agent --auth "Bearer sk-xxx"
+        igris scan --http https://api.example.com/agent --auth "Bearer sk-xxx"
     """
     
     if not http and not stdio:
@@ -63,7 +63,7 @@ def scan(
     target_display = http if http else stdio
     
     console.print(Panel.fit(
-        f"[bold]Voight Security Scanner[/]\n"
+        f"[bold]Igris Security Scanner[/]\n"
         f"[dim]Target:[/] {target_display}",
         title="🔒 Scan Starting",
     ))

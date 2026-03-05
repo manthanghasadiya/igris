@@ -1,11 +1,11 @@
 """
-voight Attack Modules
+igris Attack Modules
 =======================
 
 Security testing modules for AI agents.
 """
 
-from voight.modules.prompt_injection import (
+from igris.modules.prompt_injection import (
     PromptInjectionScanner,
     Finding,
     Severity,
