@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "igris"
-version = "0.1.0"
+version = "0.2.0"
 description = "Security scanner for AI agent workflows - find vulnerabilities in LangChain, CrewAI, and other agent frameworks"
 readme = "README.md"
 license = "MIT"
