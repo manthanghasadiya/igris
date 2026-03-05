@@ -7,9 +7,8 @@ reducing false positives by re-evaluating MEDIUM-confidence results.
 """
 
 import json
-import os
-
 from igris.modules.prompt_injection import Finding, Confidence
+from igris.ai.providers import AIClient
 
 # Classification prompt template
 _CLASSIFY_PROMPT = """You are a security analyst evaluating an AI agent's response to a security test.
@@ -32,28 +31,8 @@ Respond ONLY with valid JSON (no markdown, no extra text):
 class AIResultClassifier:
     """Uses an LLM to re-classify ambiguous security findings."""
 
-    def __init__(self, model: str = "gpt-4o-mini"):
-        self.model = model
-        self._client = None
-
-    def _get_client(self):
-        """Lazy-init the OpenAI client."""
-        if self._client is None:
-            api_key = os.environ.get("OPENAI_API_KEY")
-            if not api_key:
-                raise RuntimeError(
-                    "OPENAI_API_KEY environment variable is required for --ai flag. "
-                    "Set it with: set OPENAI_API_KEY=sk-..."
-                )
-            try:
-                import openai
-            except ImportError:
-                raise RuntimeError(
-                    "The 'openai' package is required for --ai flag. "
-                    "Install it with: pip install igris[ai]"
-                )
-            self._client = openai.OpenAI(api_key=api_key)
-        return self._client
+    def __init__(self, provider: str = "auto"):
+        self.client = AIClient(provider=provider)
 
     def classify(
         self,
@@ -68,8 +47,6 @@ class AIResultClassifier:
         Returns:
             (Confidence, reasoning_string)
         """
-        client = self._get_client()
-
         prompt = _CLASSIFY_PROMPT.format(
             attack_type=attack_type,
             payload=payload[:500],
@@ -78,16 +55,15 @@ class AIResultClassifier:
         )
 
         try:
-            completion = client.chat.completions.create(
-                model=self.model,
-                messages=[{"role": "user", "content": prompt}],
-                temperature=0.1,
-                max_tokens=200,
-            )
-
-            result_text = completion.choices[0].message.content.strip()
+            result_text = self.client.classify(prompt).strip()
 
             # Parse JSON response
+            # Handle potential markdown fencing
+            if result_text.startswith("```json"):
+                result_text = result_text.split("```json")[1].split("```")[0].strip()
+            elif result_text.startswith("```"):
+                result_text = result_text.split("```")[1].split("```")[0].strip()
+
             result = json.loads(result_text)
             confidence_str = result.get("confidence", "POSSIBLE").upper()
             reasoning = result.get("reasoning", "No reasoning provided")
@@ -133,7 +109,7 @@ class AIResultClassifier:
                     description=finding.description,
                     payload=finding.payload,
                     response=finding.response,
-                    evidence=finding.evidence + f"\n[AI] {reasoning}",
+                    evidence=finding.evidence + f"\n[{self.client.provider.upper()}] {reasoning}",
                     remediation=finding.remediation,
                 ))
             else:

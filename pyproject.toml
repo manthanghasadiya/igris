@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "igris"
-version = "0.2.0"
+version = "0.2.1"
 description = "Security scanner for AI agent workflows - find vulnerabilities in LangChain, CrewAI, and other agent frameworks"
 readme = "README.md"
 license = "MIT"
@@ -29,6 +29,7 @@ dependencies = [
     "httpx>=0.27.0",
     "rich>=13.0.0",
     "pydantic>=2.0.0",
+    "openai>=1.0.0",
 ]
 
 [project.optional-dependencies]
@@ -37,10 +38,6 @@ dev = [
     "ruff>=0.3.0",
     "fastapi>=0.100.0",
     "uvicorn>=0.23.0",
-]
-ai = [
-    "openai>=1.0.0",
-    "anthropic>=0.20.0",
 ]
 
 [project.scripts]

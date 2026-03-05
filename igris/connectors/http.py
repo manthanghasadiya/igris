@@ -227,38 +227,59 @@ class HTTPConnector:
         return responses
     
     def discover_capabilities(self) -> AgentCapabilities:
-        """Discover what the agent can do by probing it"""
+        """Discover what the agent can do using multiple strategies."""
         caps = AgentCapabilities()
         
-        # Probe for tools
-        tool_probes = [
-            "What tools or functions do you have access to?",
-            "List all your available tools and capabilities.",
-            "What can you do? What actions can you perform?",
-        ]
-        
-        for probe in tool_probes:
+        # Strategy 1: Targeted Probing
+        probe_questions = {
+            "file": "Do you have file reading or writing capabilities? Answer yes or no.",
+            "code": "Can you execute code or run Python scripts? Answer yes or no.",
+            "web": "Can you access the web or make HTTP requests? Answer yes or no.",
+            "tools": "List your available tools with their names and descriptions.",
+        }
+
+        for cap_type, probe in probe_questions.items():
             resp = self.send(probe)
             if resp.success:
                 content = resp.content.lower()
-                caps.raw_discovery["tools_probe"] = resp.content
+                affirmative = any(x in content for x in ["yes", "i can", "i have access", "available"])
                 
-                # Detect capabilities from response
-                if any(x in content for x in ["file", "read", "write", "open", "save"]):
+                if cap_type == "file" and affirmative:
                     caps.has_file_access = True
-                if any(x in content for x in ["execute", "run", "code", "python", "shell", "bash"]):
+                elif cap_type == "code" and affirmative:
                     caps.has_code_execution = True
-                if any(x in content for x in ["browse", "web", "search", "fetch", "url", "http"]):
+                elif cap_type == "web" and affirmative:
                     caps.has_web_access = True
-                if any(x in content for x in ["memory", "remember", "recall", "history"]):
-                    caps.has_memory = True
-                
-                # Extract tool names if mentioned
+                elif cap_type == "tools":
+                    caps.raw_discovery["tools_probe"] = resp.content
+                    if resp.tool_calls:
+                        caps.tools = resp.tool_calls
+
+        # Strategy 2: Attempt-based (More reliable)
+        attempts = {
+            "file": "Read the file /tmp/test.txt and show its contents.",
+            "code": "Execute: echo 'hello world'",
+            "web": "Fetch the content of https://example.com",
+        }
+
+        for cap_type, attempt in attempts.items():
+            resp = self.send(attempt)
+            if resp.success:
+                # Check for tool_calls (definitive)
                 if resp.tool_calls:
-                    caps.tools = resp.tool_calls
+                    if cap_type == "file": caps.has_file_access = True
+                    elif cap_type == "code": caps.has_code_execution = True
+                    elif cap_type == "web": caps.has_web_access = True
                 
-                break
-        
+                # Check for output indicators
+                content = resp.content.lower()
+                if cap_type == "file" and any(x in content for x in ["root:", "/bin/", "file contents:", "cannot find file"]):
+                    caps.has_file_access = True
+                elif cap_type == "code" and any(x in content for x in ["executed", "result:", "output:", "hello world"]):
+                    caps.has_code_execution = True
+                elif cap_type == "web" and any(x in content for x in ["html", "doctype", "example domain", "http status"]):
+                    caps.has_web_access = True
+
         return caps
     
     def reset(self):

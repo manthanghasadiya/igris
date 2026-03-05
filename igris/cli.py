@@ -14,7 +14,7 @@ import typer
 from rich.console import Console
 from rich.panel import Panel
 
-from igris.commands import scan, map_agent
+from igris.commands import scan, map_agent, setup
 
 app = typer.Typer(
     name="igris",
@@ -27,6 +27,7 @@ console = Console()
 # Register commands
 app.add_typer(scan.app, name="scan", help="Scan an agent for vulnerabilities")
 app.add_typer(map_agent.app, name="map", help="Map agent architecture and capabilities")
+app.add_typer(setup.app, name="setup", help="Set up igris for your environment")
 
 
 @app.callback(invoke_without_command=True)
