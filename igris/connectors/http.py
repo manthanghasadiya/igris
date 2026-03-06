@@ -169,6 +169,11 @@ class HTTPConnector:
                         
                 response = self.client.post(self.url, json=payload)
                 
+                # If 422 Unprocessable Entity, try without session tracking
+                if response.status_code == 422 and "session_id" in payload:
+                    del payload["session_id"]
+                    response = self.client.post(self.url, json=payload)
+                
                 if response.status_code == 200:
                     self._detected_format = i
                     data = response.json()
@@ -197,6 +202,11 @@ class HTTPConnector:
                     payload["session_id"] = self.session_id
                     
             response = self.client.post(self.url, json=payload)
+            
+            # If 422 Unprocessable Entity, try without session tracking
+            if response.status_code == 422 and "session_id" in payload:
+                del payload["session_id"]
+                response = self.client.post(self.url, json=payload)
             
             if response.status_code != 200:
                 return AgentResponse(

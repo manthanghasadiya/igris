@@ -37,6 +37,9 @@ def main(
         console.print("[red]Error: Must specify an agent endpoint with --http[/red]")
         raise typer.Exit(1)
 
+    import time
+    start_time = time.time()
+
     console.print(Panel.fit("🔒 [bold blue]Scan Starting[/bold blue]", border_style="blue"))
     
     with Progress(
@@ -51,6 +54,9 @@ def main(
         caps = connector.discover_capabilities()
         progress.update(task_id, completed=1, description="Agent connected and mapped")
         
+        console.print(f"[dim]Target: {url}[/dim]")
+        console.print(f"[dim]Modules: {modules}[/dim]")
+        
         selected_modules = [m.strip() for m in modules.split(",")]
         all_findings = []
         
@@ -59,7 +65,7 @@ def main(
         # --- Prompt Injection ---
         if "injection" in selected_modules:
             task_id = progress.add_task(description="Running Prompt Injection tests...", total=1)
-            scanner = PromptInjectionScanner(connector, verbose=verbose)
+            scanner = PromptInjectionScanner(connector, verbose=verbose, use_ai=ai, ai_provider=provider)
             findings = scanner.scan_all()
             all_findings.extend(findings)
             progress.update(task_id, completed=1, description=f"Prompt Injection: {len(findings)} findings")
@@ -109,6 +115,9 @@ def main(
     if output:
         _save_report(url, caps, final_findings, output)
         console.print(f"\n[green]Report saved to {output}[/green]")
+
+    total_time = time.time() - start_time
+    console.print(f"\n[bold]Scan completed in {total_time:.1f}s[/bold]")
 
     # Exit code 1 if critical findings found
     if any(f.severity == Severity.CRITICAL for f in final_findings):
